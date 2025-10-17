@@ -1,31 +1,26 @@
-# Dockerfile untuk QRIS Transaction Generator
-FROM node:18-alpine
+# Dockerfile untuk QRIS Transaction Generator - Alternative dengan Ubuntu
+FROM node:18
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies yang diperlukan untuk native modules
-RUN apk add --no-cache \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     python3 \
     make \
     g++ \
-    cairo-dev \
-    jpeg-dev \
-    pango-dev \
-    giflib-dev \
-    librsvg-dev \
-    pixman-dev \
-    pkgconfig \
-    libc6-compat
+    libcairo2-dev \
+    libjpeg-dev \
+    libpango1.0-dev \
+    libgif-dev \
+    librsvg2-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies dengan error handling
-RUN npm cache clean --force && \
-    npm ci --only=production --ignore-scripts && \
-    npm rebuild && \
-    npm cache clean --force
+# Install dependencies
+RUN npm install --production --no-audit --no-fund
 
 # Copy application code
 COPY . .

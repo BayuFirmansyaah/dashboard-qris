@@ -3,13 +3,16 @@ version: '3.8'
 
 services:
   qris-app:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.simple
     container_name: qris-generator
     ports:
       - "3002:3002"
     environment:
       - NODE_ENV=production
       - PORT=3002
+      - NPM_CONFIG_LOGLEVEL=warn
     volumes:
       # Mount untuk menyimpan file upload dan generated
       - ./public/uploads:/app/public/uploads
@@ -18,7 +21,7 @@ services:
       - ./base_template.png:/app/base_template.png
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3002/"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3002/', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
       interval: 30s
       timeout: 10s
       retries: 3

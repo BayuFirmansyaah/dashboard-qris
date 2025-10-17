@@ -1,0 +1,35 @@
+# Dockerfile Simple - QRIS Transaction Generator
+FROM node:18-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install minimal system dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies step by step
+RUN npm cache clean --force
+RUN npm install --production --no-optional
+RUN npm cache clean --force
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p public/uploads public/generated
+
+# Set permissions
+RUN chmod -R 755 public/
+
+# Expose port
+EXPOSE 3002
+
+# Start application
+CMD ["node", "server.js"]
