@@ -5,7 +5,7 @@ services:
   qris-app:
     build: 
       context: .
-      dockerfile: Dockerfile.simple
+      dockerfile: Dockerfile
     container_name: qris-generator
     ports:
       - "3002:3002"

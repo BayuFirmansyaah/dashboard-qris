@@ -1,4 +1,8 @@
 {
+  "name": "qris-transaction-generator",
+  "version": "1.0.0",
+  "description": "QRIS Transaction Generator for payment QR codes",
+  "main": "server.js",
   "type": "module",
   "dependencies": {
     "axios": "^1.6.0",
@@ -16,5 +20,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": ["qris", "payment", "qr-code", "indonesia"],
+  "author": "BayuFirmansyaah",
+  "license": "MIT"
 }

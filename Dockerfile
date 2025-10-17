@@ -1,37 +1,44 @@
-# Gunakan base image Node.js versi 20 (LTS) atau 22
-FROM node:20-alpine
+# Gunakan base image Node.js versi 18 (LTS stable)
+FROM node:18-alpine
 
-# Set working directory
-WORKDIR /
+# Set working directory yang benar
+WORKDIR /app
 
-# Install dependencies sistem yang dibutuhkan Chromium
+# Install dependencies sistem yang dibutuhkan
 RUN apk add --no-cache \
-    nss \
-    freetype \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont \
-    udev \
+    python3 \
+    make \
+    g++ \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    giflib-dev \
     bash \
-    curl \
-    openssl
-
+    curl
 
 # Copy package.json dan package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies dengan error handling
+RUN npm cache clean --force && \
+    npm install --production --no-audit --no-fund && \
+    npm cache clean --force
 
 # Copy semua source code
 COPY . .
 
-# Copy entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Create necessary directories
+RUN mkdir -p public/uploads public/generated
+
+# Set permissions
+RUN chmod -R 755 public/
 
 # Expose port aplikasi
 EXPOSE 3002
 
-# Jalankan entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:3002/', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Jalankan aplikasi langsung
+CMD ["node", "server.js"]
