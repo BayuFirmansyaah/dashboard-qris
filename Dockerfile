@@ -10,6 +10,9 @@ RUN npm install --production --no-audit --no-fund
 # Copy source code
 COPY . .
 
+# Create necessary directories if they don't exist
+RUN mkdir -p public/uploads public/generated
+
 # Expose port aplikasi
 EXPOSE 3002
 
