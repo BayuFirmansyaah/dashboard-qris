@@ -50,9 +50,9 @@ Untuk test perbaikan ini:
    ```
 
 2. **Akses aplikasi:**
-   - Landing page: http://localhost:3001
-   - Quick Generate: http://localhost:3001/qris-auto.html
-   - Advanced Template: http://localhost:3001/qris-advanced.html
+   - Landing page: http://localhost:3002
+   - Quick Generate: http://localhost:3002/qris-auto.html
+   - Advanced Template: http://localhost:3002/qris-advanced.html
 
 3. **Test flow:**
    - Upload gambar QRIS

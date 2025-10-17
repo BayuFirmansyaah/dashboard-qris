@@ -3,7 +3,7 @@
 ## 📋 Prerequisites
 
 - Docker & Docker Compose installed
-- Port 3001 available
+- Port 3002 available
 - Base template file (`base_template.png`) di root directory
 
 ## 🚀 Quick Start
