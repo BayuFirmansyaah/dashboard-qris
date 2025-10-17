@@ -28,7 +28,7 @@ cp .env.example .env
 docker-compose up -d
 
 # Akses aplikasi
-open http://localhost:3001
+open http://localhost:3002
 ```
 
 ### Production Deployment
@@ -83,10 +83,10 @@ qris-transction/
    ls -la base_template.png
    ```
 
-2. **Test locally:**
+3. **Test locally:**
    ```bash
    docker-compose up -d
-   curl http://localhost:3001
+   curl http://localhost:3002
    ```
 
 3. **Push to GitHub:**

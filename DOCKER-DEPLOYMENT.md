@@ -87,7 +87,7 @@ Container memiliki health check yang mengecek:
 ### Environment Variables
 ```bash
 export NODE_ENV=production
-export PORT=3001
+export PORT=3002
 ```
 
 ### Nginx Reverse Proxy (Optional)
@@ -100,7 +100,7 @@ events {
 
 http {
     upstream qris_app {
-        server qris-app:3001;
+        server qris-app:3002;
     }
 
     server {
@@ -133,7 +133,7 @@ http {
 docker-compose logs qris-app
 
 # Check if port is available
-netstat -tulpn | grep :3001
+netstat -tulpn | grep :3002
 ```
 
 ### Permission issues
