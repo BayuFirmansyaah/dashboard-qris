@@ -1,47 +1,37 @@
-# Dockerfile untuk QRIS Transaction Generator
-FROM node:18-alpine
+# Gunakan base image Node.js versi 20 (LTS) atau 22
+FROM node:20-alpine
 
 # Set working directory
-WORKDIR /app
+WORKDIR /
 
-# Install system dependencies yang diperlukan untuk native modules
+# Install dependencies sistem yang dibutuhkan Chromium
 RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    cairo-dev \
-    jpeg-dev \
-    pango-dev \
-    giflib-dev \
-    librsvg-dev \
-    pixman-dev \
-    pkgconfig \
-    libc6-compat
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    udev \
+    bash \
+    curl \
+    openssl
 
-# Copy package files
+
+# Copy package.json dan package-lock.json
 COPY package*.json ./
 
-# Install dependencies dengan error handling
-RUN npm cache clean --force && \
-    npm ci --only=production --ignore-scripts && \
-    npm rebuild && \
-    npm cache clean --force
+# Install dependencies
+RUN npm install
 
-# Copy application code
+# Copy semua source code
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p public/uploads public/generated
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Set permissions
-RUN chmod -R 755 public/
-
-# Expose port
+# Expose port aplikasi
 EXPOSE 3002
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3002/', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
-
-# Start application
-CMD ["node", "server.js"]
+# Jalankan entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
